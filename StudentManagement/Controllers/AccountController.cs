@@ -51,22 +51,26 @@ namespace StudentManagement.Controllers
                     {
                         var student = new Students
                         {
-                            UserId = user.Id
+
+                            UserId = user.Id,
+                            StudentName = user.FullName
                         };
 
                         _dbContext.Students.Add(student);
                         await _dbContext.SaveChangesAsync();
                     }
-                    //else if (model.UserType == "Instructor")
-                    //{
-                    //    var student = new Students
-                    //    {
-                    //        UserId = user.Id
-                    //    };
+                    else if (model.UserType == "Instructor")
+                    {
+                        var instructor = new Instructor
+                        {
 
-                    //    _dbContext.Students.Add(student);
-                    //    await _dbContext.SaveChangesAsync();
-                    //}
+                            UserId = user.Id,
+                            InstructorName = user.FullName
+                        };
+
+                        _dbContext.Instructor.Add(instructor);
+                        await _dbContext.SaveChangesAsync();
+                    }
 
                     // Redirect to login or dashboard
                     return RedirectToAction("Login", "Account");
