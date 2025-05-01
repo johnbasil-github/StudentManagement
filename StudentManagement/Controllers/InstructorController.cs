@@ -1,25 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using StudentManagement.Data;
 
 namespace StudentManagement.Controllers
 {
-    public class StudentController : Controller
+    public class InstructorController : Controller
     {
-
         private readonly ApplicationDbContext _context;
-        public StudentController(ApplicationDbContext context)
+        public InstructorController(ApplicationDbContext context)
         {
             _context = context;
         }
         public IActionResult Index()
         {
-            var studentLsit = _context.Students.ToList();
-            return View(studentLsit);
+            var instructorList = _context.Instructor.ToList();
+
+            return View(instructorList);
         }
-
-
-
-
     }
 }

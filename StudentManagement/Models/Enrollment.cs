@@ -19,9 +19,9 @@ namespace StudentManagement.Models
         [ForeignKey("CourseId")]
         public Course Course { get; set; }
 
-        public int GradeId {  get; set; }
-        [ForeignKey("GradeId")]
-        public Grades Grade { get; set; } // 1-to-1 with Grade
+        //public int GradeId {  get; set; }
+        //[ForeignKey("GradeId")]
+        //public Grades Grade { get; set; } // 1-to-1 with Grade
    
     }
 

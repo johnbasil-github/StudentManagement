@@ -22,9 +22,6 @@
                 @Html.DisplayNameFor(model => model.Course.CourseName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Grade.Grade)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.EnrollmentDate)
             </th>
         </tr>
@@ -41,16 +38,13 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Course.CourseName)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Grade.Grade)
-            </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.EnrollmentDate)
                 </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Edit", "Edit", new { id=item.EnrollmentId }) |
+                @Html.ActionLink("Details", "Details", new { id=item.EnrollmentId }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.EnrollmentId })
             </td>
         </tr>
 }

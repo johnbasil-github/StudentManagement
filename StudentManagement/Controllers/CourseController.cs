@@ -5,18 +5,20 @@ using StudentManagement.Models;
 
 namespace StudentManagement.Controllers
 {
-    public class EnrollmentController : Controller
+    public class CourseController : Controller
     {
         private readonly ApplicationDbContext _context;
-        public EnrollmentController(ApplicationDbContext context)
+        public CourseController(ApplicationDbContext context)
         {
             _context = context;
         }
         public IActionResult Index()
         {
-            var enrollmentList = _context.Enrollment.Include(x => x.Students).Include(x => x.Course).ToList();
-            return View(enrollmentList);
+            var courseList = _context.Course.Include( x => x.Instructor).ToList();
+
+            return View(courseList);
         }
+
 
         [HttpGet]
         public IActionResult Create()
@@ -24,44 +26,46 @@ namespace StudentManagement.Controllers
             return View();
         }
 
+
         [HttpPost]
-        public IActionResult Create(Enrollment enrollment)
+        public IActionResult Create(Course course)
         {
-            _context.Enrollment.Add(enrollment);
+            _context.Course.Update(course);
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
 
+
+
         public IActionResult Details(int id)
         {
-            //var person = _context.Enrollment.Include(x => x.Students).Include(x => x.Course).Find(id);
-            var person = _context.Enrollment.Include(x => x.Students).Include(x => x.Course).FirstOrDefault(x => x.EnrollmentId == id);
+            var person = _context.Course.Include(x => x.Instructor).FirstOrDefault(x => x.CourseId == id);
+
             return View(person);
         }
 
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var person = _context.Enrollment.Find(id);
+            var person = _context.Course.Find(id);
             return View(person);
         }
 
-        [HttpPost]
-        public IActionResult Edit(Enrollment enrollment)
+        public IActionResult Edit(Course course)
         {
-            _context.Enrollment.Update(enrollment);
+            _context.Course.Update(course);
             _context.SaveChanges();
             return RedirectToAction("Index");
-
         }
 
-        public ActionResult Delete(int id)
+        public IActionResult Delete(int id)
         {
-            var person = _context.Enrollment.Find(id);
+            var person = _context.Course.Find(id);
 
-            _context.Enrollment.Remove(person);
+            _context.Course.Remove(person);
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
     }
+
 }
