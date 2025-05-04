@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudentManagement.Data;
 using StudentManagement.Models;
@@ -7,10 +8,13 @@ namespace StudentManagement.Controllers
 {
     public class EnrollmentController : Controller
     {
+        private readonly UserManager<ApplicationUser> _userManager;
+
         private readonly ApplicationDbContext _context;
-        public EnrollmentController(ApplicationDbContext context)
+        public EnrollmentController(UserManager<ApplicationUser>userManager, ApplicationDbContext context)
         {
             _context = context;
+            _userManager = userManager;
         }
         public IActionResult Index()
         {
@@ -63,5 +67,86 @@ namespace StudentManagement.Controllers
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
+
+
+
+        public async Task<IActionResult> Enroll(int courseId)
+        {
+            // Get logged-in user ID
+            var userId = _userManager.GetUserId(User);
+
+            // Find the matching student record
+            var student = await _context.Students.FirstOrDefaultAsync(s => s.UserId == userId);
+
+            if (student == null)
+            {
+                return NotFound("Student not found.");
+            }
+
+            // Check if already enrolled
+            bool alreadyEnrolled = _context.Enrollment
+                .Any(e => e.StudentId == student.StudentId && e.CourseId == courseId);
+
+            if (alreadyEnrolled)
+            {
+                TempData["Message"] = "Already enrolled in this course.";
+                return RedirectToAction("View", "Course");
+            }
+
+            // Enroll student
+            var enrollment = new Enrollment
+            {
+                CourseId = courseId,
+                StudentId = student.StudentId,
+                EnrollmentDate = DateOnly.FromDateTime(DateTime.Now)
+            };
+
+            _context.Enrollment.Add(enrollment);
+            await _context.SaveChangesAsync();
+
+            TempData["Message"] = "Successfully enrolled in course.";
+            return RedirectToAction("View", "Course");
+        }
+
+
+        public async Task<IActionResult> MyEnrollments()
+        {
+            var userId = _userManager.GetUserId(User);
+            var student = await _context.Students.FirstOrDefaultAsync(s => s.UserId == userId);
+
+            if (student == null)
+            {
+                return NotFound("Student not found.");
+            }
+
+            var enrollments = _context.Enrollment
+                .Include(e => e.Course)
+                .Where(e => e.StudentId == student.StudentId)
+                .ToList();
+
+            return View(enrollments);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteEnrollment(int enrollmentId)
+        {
+            var enrollment = await _context.Enrollment.FindAsync(enrollmentId);
+            if (enrollment != null)
+            {
+                _context.Enrollment.Remove(enrollment);
+                await _context.SaveChangesAsync();
+                TempData["Message"] = "Enrollment deleted successfully.";
+            }
+            else
+            {
+                TempData["Error"] = "Enrollment not found.";
+            }
+
+            return RedirectToAction("MyEnrollments");
+        }
+
+
+
     }
 }

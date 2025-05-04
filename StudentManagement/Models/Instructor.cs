@@ -11,11 +11,11 @@ namespace StudentManagement.Models
         public int InstructorId { get; set; }
 
         public string? InstructorName { get; set; }
-            public string? UserId { get; set; }
-            [ForeignKey("UserId")]
-            public ApplicationUser? User { get; set; }
+        public string? UserId { get; set; }
+        [ForeignKey("UserId")]
+        public ApplicationUser? User { get; set; }
 
-            public List<Course> Courses { get; set; }
+        public List<Course> Courses { get; set; }
 
     }
 }

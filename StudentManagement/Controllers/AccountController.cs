@@ -108,7 +108,24 @@ namespace StudentManagement.Controllers
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Home"); // or dashboard
+
+                    var user = await _userManager.FindByEmailAsync(model.Email);
+
+
+                    if (user.UserType == "Student")
+                    {
+                        return RedirectToAction("Index", "Student", new { userId = user.Id });
+                    }
+                    else if (user.UserType == "Instructor")
+                    {
+                        return RedirectToAction("Index", "Instructor", new { userId = user.Id });
+                    }
+                    else if (user.UserType == "Admin")
+                    {
+                        return RedirectToAction("Index", "Admin");
+                    }
+
+                    return RedirectToAction("Index", "Home"); 
                 }
                 else
                 {

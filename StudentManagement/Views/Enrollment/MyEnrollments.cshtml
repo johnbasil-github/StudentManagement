@@ -1,0 +1,32 @@
+﻿@model IEnumerable<StudentManagement.Models.Enrollment>
+
+@{
+    ViewData["Title"] = "My Enrolled Courses";
+}
+
+<h2>My Enrolled Courses</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Course Name</th>
+            <th>Enrollment Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var enrollment in Model)
+        {
+            <tr>
+                <td>@enrollment.Course.CourseName</td>
+                <td>@enrollment.EnrollmentDate</td>
+                <td>
+                    <form asp-controller="Enrollment" asp-action="DeleteEnrollment" method="post">
+                        <input type="hidden" name="enrollmentId" value="@enrollment.EnrollmentId" />
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+               
+            </tr>
+        }
+    </tbody>
+</table>

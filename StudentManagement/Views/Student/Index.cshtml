@@ -1,13 +1,14 @@
-﻿@model IEnumerable<StudentManagement.Models.Students>
+﻿@model StudentManagement.Models.Students
+
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = $"Welcome {Model.StudentName}";
 }
 
-<h1>Index</h1>
+<h1>@ViewData["Title"]</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    @* <a asp-action="Create">Create New</a> *@
 </p>
 <table class="table">
     <thead>
@@ -25,23 +26,31 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@* @foreach (var item in Model) { *@
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.StudentId)
+                @Html.DisplayFor(modelItem => Model.StudentId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.StudentName)
+                @Html.DisplayFor(modelItem => Model.StudentName)
             </td>
             @* <td> *@
             @*     @Html.DisplayFor(modelItem => item.UserId) *@
             @* </td> *@
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.StudentId }) |
-                @Html.ActionLink("Details", "Details", new { id=item.StudentId }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.StudentId })
+                @Html.ActionLink("Edit", "Edit", new { id=Model.StudentId }) |
+                @Html.ActionLink("Details", "Details", new { id=Model.StudentId }) |
+                @Html.ActionLink("Delete", "Delete", new { id=Model.StudentId })
+                <a asp-controller="Course" asp-action="View" class="btn btn-primary">
+                    View Available Courses
+                </a>
+                <a asp-controller="Enrollment" asp-action="MyEnrollments" class="btn btn-success">
+                    View Enrolled Courses
+                </a>
+
+
             </td>
         </tr>
-}
+@* } *@
     </tbody>
 </table>

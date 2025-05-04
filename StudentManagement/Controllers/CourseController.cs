@@ -19,6 +19,12 @@ namespace StudentManagement.Controllers
             return View(courseList);
         }
 
+        public IActionResult View()
+        {
+            var courseList = _context.Course.Include(x => x.Instructor).ToList();
+
+            return View(courseList);
+        }
 
         [HttpGet]
         public IActionResult Create()
